@@ -4,6 +4,8 @@
 #include <vector>
 #include <conio.h>
 #include <ctime> 
+#include "Param.h"
+#include "Consts.h"
 
 #define K_ENTER 0x0D
 #define K_LEFT 0x25
@@ -21,51 +23,11 @@ using namespace std;
 
 HWND hwnd;
 DWORD pId;
+
 HANDLE handle;
-class Param
-{
-	uintptr_t address;
-	uintptr_t c_address;
-	std::vector<unsigned int> offsets;
-	bool is_2bytes;
-public:
-	int value;
-	void Set(uintptr_t new_address, std::vector<unsigned int> new_offsets, bool new_is_2bytes)
-	{
-		address = new_address;
-		offsets = new_offsets;
-		is_2bytes = new_is_2bytes;
-		ParamFind();
-	}
-	void ParamFind()
-	{
-		uintptr_t addr = address;
-		for (int i = 0; i < offsets.size(); ++i)
-		{
-			//printf("[*] address%i: %08x and %08x\n ", i, addr, offsets[i]);
-			addr += offsets[i];
-			//printf("%08x\n", addr);
-			if (i != offsets.size() - 1)
-				ReadProcessMemory(handle, (BYTE*)addr, &addr, sizeof(addr), 0);
-		}
-		c_address = addr;
-		//printf("Address: [%08x]  ", addr);
-		ParamUpdate();
-	}
-	void ParamUpdate()
-	{
-		short int short_value;
-		if (is_2bytes)
-		{
-			ReadProcessMemory(handle, (PBYTE*)c_address, &short_value, sizeof(short_value), NULL);
-			value = short_value;
-		}
-		else
-		{
-			ReadProcessMemory(handle, (PBYTE*)c_address, &value, sizeof(value), NULL);
-		}
-	}
-};
+uintptr_t address_curosr;
+uintptr_t address_player;
+
 Param cursorX;
 Param cursorY;
 Param cursorFlag;
@@ -73,13 +35,6 @@ Param playerMaxHP;
 Param playerHP;
 Param playerX;
 Param playerY;
-Param isMoving;
-
-// ����������� ������� (����� ������ ��� ����������� ����)
-uintptr_t address_curosr; // Cursor
-uintptr_t address_player; // Player
-
-
 
 
 // ��� ���������
@@ -105,46 +60,37 @@ int hit_counter = 0;
 // �������� ����������
 void CreateParams()
 {
-	cursorX.Set(address_curosr, { 0x24, 0x10, 0x4, 0x21C, 0x8 }, true);
-	cursorY.Set(address_curosr, { 0x24, 0x10, 0x4, 0x21C, 0xA }, true);
-	cursorFlag.Set(address_curosr, { 0x24, 0x10, 0x4, 0x21C, 0x6C }, true);
-	playerMaxHP.Set(address_player, { 0x0,0x10,0xD4,0x4,0xB8,0x4C,0xA0 }, false);
-	playerHP.Set(address_player, { 0x0,0x10,0xD4,0x4,0xB8,0x4C,0x9C }, false);
-	lastHP = playerHP.value;
-	playerX.Set(address_player, { 0x0,0x10,0xD4,0x4,0xB8,0x4C,0xB0 }, true);
-	playerY.Set(address_player, { 0x0, 0x10, 0xD4, 0x4, 0xB8, 0x4C, 0xB2 }, true);
-	isMoving.Set(address_player, { 0x0, 0x10, 0xD4, 0x4, 0xB8, 0x4C, 0xD0 }, true);
+	cursorX.SetAdress(handle, address_curosr, CURSOR_X_OFFSETS, true);
+	cursorY.SetAdress(handle, address_curosr, CURSOR_Y_OFFSETS, true);
+	cursorFlag.SetAdress(handle, address_curosr, CURSOR_STATUS_OFFSETS, true);
+	printf("Max HP:\n");
+	playerMaxHP.SetAdress(handle, address_player, PLAYER_MAX_HP_OFFSETS, false);
+	printf("HP:\n");
+	playerHP.SetAdress(handle, address_player, PLAYER_HP_OFFSETS, false);
+	printf("X:\n");
+	playerX.SetAdress(handle, address_player, PLAYER_X_OFFSETS, true);
+	printf("Y:\n");
+	playerY.SetAdress(handle, address_player, PLAYER_Y_OFFSETS, true);
 }
 // ���������� �������� � ����������
-void UpdateParams() {
-	cursorX.ParamUpdate();
-	cursorY.ParamUpdate();
-	cursorFlag.ParamUpdate();
-	playerMaxHP.ParamUpdate();
-	lastHP = playerHP.value;
-	playerHP.ParamUpdate();
-	playerX.ParamUpdate();
-	playerY.ParamUpdate();
-	isMoving.ParamUpdate();
-}
+// 
 // ����� ����������
 void PrintParams()
 {
-	printf("CursorX: [%i]\n", cursorX.value);
-	printf("CursorY: [%i]\n", cursorY.value);
-	printf("CursorFlag: [%i]\n", cursorFlag.value);
-	printf("PlayerMaxHP: [%i]\n", playerMaxHP.value);
-	printf("PlayerHP: [%i]\n", playerHP.value);
-	printf("PlayerX: [%i]\n", playerX.value);
-	printf("PlayerY: [%i]\n", playerY.value);
-	printf("PlayerIsMoving: [%i]\n\n", isMoving.value);
+	printf("CursorX [%i]\n", cursorX.GetValue());
+	printf("CursorY [%i]\n", cursorY.GetValue());
+	printf("CursorFlag [%i]\n", cursorFlag.GetValue());
+	printf("PlayerMaxHP [%i]\n", playerMaxHP.GetValue());
+	printf("PlayerHP [%i]\n", playerHP.GetValue());
+	printf("PlayerX [%i]\n", playerX.GetValue());
+	printf("PlayerY [%i]\n", playerY.GetValue());
 }
 //////////////////////
 
-uintptr_t GetModuleBaseAddress(DWORD procId, const TCHAR* modName)
+uintptr_t GetModuleBaseAddress(DWORD proc_id, const TCHAR* modName)
 {
 	uintptr_t modBaseAddr = 0;
-	HANDLE hSnap = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE | TH32CS_SNAPMODULE32, procId);
+	HANDLE hSnap = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE | TH32CS_SNAPMODULE32, proc_id);
 	if (hSnap != INVALID_HANDLE_VALUE)
 	{
 		MODULEENTRY32 modEntry;
@@ -167,282 +113,11 @@ uintptr_t GetModuleBaseAddress(DWORD procId, const TCHAR* modName)
 }
 
 
-// �������� ������� ������� � ����
-void keyPress(uintptr_t key, int sleep = 0) {
-	LPARAM lParam;
-	int ScanCode = MapVirtualKey(key, 0);
-	lParam = ScanCode << 16;
-	lParam |= 1;
-	PostMessage(hwnd, WM_KEYDOWN, key, lParam);
-	Sleep(sleep);
-	PostMessage(hwnd, WM_KEYUP, key, lParam);
-
-	//�������� ��� ������������
-	if (key == K_UP || key == K_LEFT || key == K_RIGHT || key == K_DOWN)
-		Sleep(200);
-	//
-}
-
-// ����������� ������� �� ������ �����
-void CursorToPoint(int x, int y)
-{
-	int start = clock();
-	while (cursorX.value != x || cursorY.value != y)
-	{
-		//printf("X %i == %i  Y %i == %i\n", cursorX, x, cursorY, y);
-		if (cursorX.value < x)
-			keyPress(K_RIGHT);
-		if (cursorX.value > x)
-			keyPress(K_LEFT);
-		if (cursorY.value > y)
-			keyPress(K_UP);
-		if (cursorY.value < y)
-			keyPress(K_DOWN);
-		UpdateParams();
-		if ((clock() - start) / CLOCKS_PER_SEC > 6)
-		{
-			keyPress(K_ENTER, 5);
-		}
-	}
-}
-
-// �������� �� ����� � �����
-bool isEnemy()
-{
-	if (cursorFlag.value == 8 || cursorFlag.value == 0)
-		return true;
-	else
-		return false;
-}
-// �������� �� ��� � �����
-bool isLoot()
-{
-	if (cursorFlag.value == 10)
-		return true;
-	else
-		return false;
-}
-// ������� ���� �� ����� � ������������ ������
-void attackEnemy() {
-	keyPress(K_ENTER, 5);
-	//if ((clock() - skill_reload_4) > 30)
-	//{
-	//	keyPress(K_4);
-	//	skill_reload_2 = clock();
-	//	Sleep(100);
-	//}
-	UpdateParams();
-	if ((clock() - skill_reload_2) > 16 && isEnemy())
-	{
-		keyPress(K_2);
-		skill_reload_2 = clock();
-		Sleep(150);
-	}
-	UpdateParams();
-	if ((clock() - skill_reload_1) > 10 && isEnemy())
-	{
-		keyPress(K_1);
-		skill_reload_1 = clock();
-		Sleep(150);
-	}
-	while (isMoving.value == 1)
-		UpdateParams();
-	Sleep(500);
-}
-// �������� �����
-void lootEnemy()
-{
-	keyPress(K_ENTER, 5);
-	while (isMoving.value == 1)
-		UpdateParams();
-	while (isLoot())
-	{
-		keyPress(K_ENTER, 5);
-		Sleep(250);
-		UpdateParams();
-	}
-}
-
-
-// �������� �� ����
-bool isHit()
-{
-	if (lastHP <= playerHP.value)
-	{
-		return false;
-	}
-	if (lastHP > playerHP.value)
-	{
-		return true;
-	}
-	return false;
-}
-// �������� ��� �����
-bool action()
-{
-	if (isEnemy())
-	{
-		attackEnemy();
-		while (isEnemy())
-		{
-			attackEnemy();
-			//cout << "fight!" << endl;
-			UpdateParams();
-		}
-		UpdateParams();
-		if (isLoot())
-		{
-			cout << "Loot" << endl;
-			lootEnemy();
-			return true;
-		}
-		return true;
-	}
-	if (isLoot())
-	{
-		cout << "Loot" << endl;
-		lootEnemy();
-		return true;
-	}
-}
-bool hit_reaction(int range)
-{
-	cout << "hit!" << endl;
-	//bool gox = true;
-	//int find_range = 1;
-
-	int n = range;
-	int x = playerX.value, y = playerY.value;
-	int go = 1;
-	bool ret = false;
-	CursorToPoint(x, y);
-	if (action())
-		ret = true;
-	//int i = n;
-	for (int i = 1; i <= n; i++)
-	{
-		int k = x - i, j = y - i;
-		switch (go)
-		{
-		case 1:
-			for (k; k < x + i; ++k)
-			{
-				CursorToPoint(k, j);
-				if (action())
-					ret = true;
-			}
-			go = 2;
-			//break;
-		case 2:
-			for (j; j < y + i; ++j)
-			{
-				CursorToPoint(k, j);
-				if (action())
-					ret = true;
-			}
-			go = 3;
-			//break;
-		case 3:
-			for (k; k > x - i; --k)
-			{
-				CursorToPoint(k, j);
-				if (action())
-					ret = true;
-			}
-			go = 4;
-			//break;
-		case 4:
-			for (j; j > y - i; --j)
-			{
-				CursorToPoint(k, j);
-				if (action())
-					ret = true;
-			}
-			go = 1;
-			//break;
-		}
-	}
-	return ret;
-}
-// �������� �� ���� � ������� 3 ������ (���� �� ����������)
-bool fight()
-{
-	int start = clock();
-	while ((clock() - start) / CLOCKS_PER_SEC < 3)
-	{
-		UpdateParams();
-		if (isHit())
-			return true;
-	}
-	return false;
-}
-// �������� ��� ����� ��������
-bool PlayerHealth(int x = save_point[0], int y = save_point[1], int minHP = playerMinHP)
-{
-	if (playerHP.value < minHP)
-	{
-		CursorToPoint(x, y);
-		if (cursorFlag.value != 15)
-		{
-			keyPress(K_ENTER);
-			while (playerX.value != cursorX.value || playerY.value != cursorY.value)
-				UpdateParams();
-			while (playerHP.value != playerMaxHP.value)
-			{
-				UpdateParams();
-				if (isHit())
-				{
-					hit_counter++;
-					if (hit_reaction(hit_counter))
-						hit_counter = 0;
-					else
-						continue;
-				}
-			}
-		}
-		else
-		{
-			printf("\n		[*]Cursor Block!\n");
-		}
-		return false;
-	}
-	else
-		return true;
-}
-
-bool findEnemy(int xs = find_region[0], int xe = find_region[1], int ys = find_region[2], int ye = find_region[3])
-{
-	bool gox = true;
-	for (int k = xe; k >= xs; k--) //for (int k = xs; k <= xe; k++)
-	{
-		if (gox)
-			for (int j = ye; j >= ys; j--)
-			{
-				CursorToPoint(k, j);
-				if (isEnemy())
-					return true;
-			}
-		else
-			for (int j = ys; j <= ye; j++)
-			{
-				CursorToPoint(k, j);
-				if (isEnemy())
-					return true;
-			}
-		gox = !gox;
-	}
-	return false;
-}
-
-
-
-
-
 int main()
 {
-	SetConsoleTitle("Warspear Cheat");
+	SetConsoleTitle(L"Warspear Cheat");
 
-	hwnd = FindWindow(NULL, "Warspear Online");
+	hwnd = FindWindow(NULL, L"Warspear Online");
 	if (hwnd == NULL)
 	{
 		cout << "[-] Please Open Warspear Online" << endl;
@@ -452,6 +127,7 @@ int main()
 	cout << "	[+] Window is Opened!" << endl;
 
 	GetWindowThreadProcessId(hwnd, &pId);
+
 	handle = OpenProcess(PROCESS_ALL_ACCESS, FALSE, pId);
 	if (pId == NULL)
 	{
@@ -461,12 +137,13 @@ int main()
 	}
 	cout << "	[+] Process is Opened!" << endl;
 
-	DWORD dwBaseOffset = GetModuleBaseAddress(pId, "warspear.exe");
+	DWORD dw_base_offset = GetModuleBaseAddress(pId, L"warspear.exe");
 
 
-	ReadProcessMemory(handle, (PBYTE*)(dwBaseOffset + 0x05F0330), &address_curosr, sizeof(address_curosr), NULL);
-	ReadProcessMemory(handle, (PBYTE*)(dwBaseOffset + 0x05F49B8), &address_player, sizeof(address_player), NULL);
-	printf("address 0x%x\n ", dwBaseOffset);
+	ReadProcessMemory(handle, (PBYTE*)(dw_base_offset + CURSOR_FIRST_POINTER), &address_curosr, sizeof(address_curosr), NULL);
+	ReadProcessMemory(handle, (PBYTE*)(dw_base_offset + PLAYER_FIRST_POINTER), &address_player, sizeof(address_player), NULL);
+	
+	printf("address 0x%x\n ", dw_base_offset);
 	printf("address_curosr 0x%x\n ", address_curosr);
 	printf("address_player 0x%x\n ", address_player);
 
@@ -474,100 +151,6 @@ int main()
 
 	CreateParams();
 	PrintParams();
-	srand(clock());
-	int hit_time = clock();
-	bool changer = true;
-	int game_mode = 1;
-	while (game_mode == 1)
-	{
-		UpdateParams();
-		PlayerHealth(13, 5);
 
-		if (isHit())
-		{
-			hit_counter++;
-			if (hit_reaction(hit_counter))
-				hit_counter = 0;
-			else
-				continue;
-			Sleep((1 + rand() % (4 - 1 + 1)) * 1000);
-			CursorToPoint(17 + rand() % (19 - 17 + 1), 14 + rand() % (16 - 14 + 1));
-			keyPress(K_ENTER, 5);
-		}
-	}
-	while (game_mode == 2) {
-		UpdateParams();
-		PlayerHealth(13, 5);
-		if (changer)
-		{
-			CursorToPoint(16, 15);
-			keyPress(K_ENTER, 5);
-			while (!findEnemy(17, 19, 14, 16))
-			{
-				UpdateParams();
-				if (isHit())
-				{
-					hit_counter++;
-					if (hit_reaction(hit_counter))
-						hit_counter = 0;
-					else
-						continue;
-				}
-			}
-			while (findEnemy(17, 19, 14, 16))
-			{
-				action();
-			}
-			changer = !changer;
-			hit_time = clock();
-			while ((clock() - hit_time) / CLOCKS_PER_SEC < 5)
-			{
-				UpdateParams();
-				if (isHit())
-				{
-					hit_counter++;
-					if (hit_reaction(hit_counter))
-						hit_counter = 0;
-					else
-						continue;
-				}
-			}
-		}
-		else
-		{
-			CursorToPoint(11, 15);
-			keyPress(K_ENTER, 5);
-			while (!findEnemy(7, 9, 13, 16))
-			{
-				UpdateParams();
-				if (isHit())
-				{
-					hit_counter++;
-					if (hit_reaction(hit_counter))
-						hit_counter = 0;
-					else
-						continue;
-				}
-			}
-			while (findEnemy(7, 9, 13, 16))
-			{
-				action();
-			}
-			changer = !changer;
-			hit_time = clock();
-			while ((clock() - hit_time) / CLOCKS_PER_SEC < 5)
-			{
-				UpdateParams();
-				if (isHit())
-				{
-					hit_counter++;
-					if (hit_reaction(hit_counter))
-						hit_counter = 0;
-					else
-						continue;
-				}
-			}
-		}
-	}
 	return 0;
 }
