@@ -4,10 +4,18 @@
 #include <Windows.h>
 #include <TlHelp32.h>
 
+Param::Param() 
+{
+	this->handle = NULL;
+	this->size = NULL;
+	this->address = NULL;
+	this->value = NULL;
+}
 
-void Param::SetAdress(HANDLE handle, uintptr_t first_address, std::vector<unsigned int> offsets, bool is_short)
+Param::Param(HANDLE handle, uintptr_t first_address, std::vector<unsigned int> offsets, bool is_short)
 {
 	this->handle = handle;
+	this->value = 0;
 
 	if (is_short)
 		this->size = sizeof(short int);

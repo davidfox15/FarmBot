@@ -127,14 +127,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Param.cpp" />
-    <ClCompile Include="Player.cpp" />
-    <ClCompile Include="Source.cpp" />
+    <ClCompile Include="src\Cursor.cpp" />
+    <ClCompile Include="src\Param.cpp" />
+    <ClCompile Include="src\Player.cpp" />
+    <ClCompile Include="src\Source.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Consts.h" />
-    <ClInclude Include="Param.h" />
-    <ClInclude Include="Player.h" />
+    <ClInclude Include="src\Consts.h" />
+    <ClInclude Include="src\Cursor.h" />
+    <ClInclude Include="src\Param.h" />
+    <ClInclude Include="src\Player.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

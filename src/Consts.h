@@ -1,0 +1,9 @@
+#pragma once
+#include <conio.h>
+#include <vector>
+
+// —канировани€ сравноивать с перезауском игры об€зательно
+// —рванить 2 сканировани€ флагов
+const uintptr_t CURSOR_FIRST_POINTER = 0x0697328;
+// Ќайти позицию и ник, найти их общий указатель на структуру и савнить 2 сканировани€
+const uintptr_t PLAYER_FIRST_POINTER = 0x069B9B0;

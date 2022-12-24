@@ -12,6 +12,7 @@ class Param
 	int value;
 
 public:
-	void SetAdress(HANDLE handle, uintptr_t first_address, std::vector<unsigned int> offsets, bool is_short);
+	Param();
+	Param(HANDLE handle, uintptr_t first_address, std::vector<unsigned int> offsets, bool is_short);
 	int GetValue();
 };
