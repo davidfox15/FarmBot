@@ -33,6 +33,9 @@
     <ClCompile Include="src\Keys.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="src\EntityList.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Consts.h">
@@ -51,6 +54,9 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="src\Keys.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="src\EntityList.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
