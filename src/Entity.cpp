@@ -1,11 +1,19 @@
 #include "Entity.h"
 
+Entity::Entity()
+{
+	this->max_hp = Param();
+	this->hp = Param();
+	this->x = Param();
+	this->y = Param();
+}
+
 Entity::Entity(HANDLE handle, uintptr_t address_entity)
 {
-	this->max_hp = Param(handle, address_entity, PLAYER_MAX_HP_OFFSETS, false);
-	this->hp = Param(handle, address_entity, PLAYER_HP_OFFSETS, false);
-	this->x = Param(handle, address_entity, PLAYER_X_OFFSETS, true);
-	this->y = Param(handle, address_entity, PLAYER_Y_OFFSETS, true);
+	this->max_hp = Param(handle, address_entity, { 0xF8 }, false);
+	this->hp = Param(handle, address_entity, { 0xF4 }, false);
+	this->x = Param(handle, address_entity, { 0x108 }, true);
+	this->y = Param(handle, address_entity, { 0x10A }, true);
 }
 
 void Entity::Set(Param x, Param y, Param max_hp, Param hp) {

@@ -14,6 +14,7 @@ class Player
 	Param hp;
 
 public:
+	Player();
 	Player(HANDLE handle, uintptr_t address_player);
 	void Set(Param x, Param y, Param max_hp, Param hp);
 	int GetX();

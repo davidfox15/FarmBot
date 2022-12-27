@@ -129,6 +129,7 @@
   <ItemGroup>
     <ClCompile Include="src\Cursor.cpp" />
     <ClCompile Include="src\Entity.cpp" />
+    <ClCompile Include="src\Keys.cpp" />
     <ClCompile Include="src\Param.cpp" />
     <ClCompile Include="src\Player.cpp" />
     <ClCompile Include="src\Source.cpp" />
@@ -137,6 +138,7 @@
     <ClInclude Include="src\Consts.h" />
     <ClInclude Include="src\Cursor.h" />
     <ClInclude Include="src\Entity.h" />
+    <ClInclude Include="src\Keys.h" />
     <ClInclude Include="src\Param.h" />
     <ClInclude Include="src\Player.h" />
   </ItemGroup>

@@ -1,4 +1,13 @@
 #include "Cursor.h"
+#include "Keys.h"
+#include <iostream>
+
+Cursor::Cursor()
+{
+	this->x = Param();
+	this->y = Param();
+	this->status = Param();
+}
 
 Cursor::Cursor(HANDLE handle, uintptr_t address_curosr)
 {
@@ -35,3 +44,45 @@ int Cursor::GetStatus()
 {
 	return status.GetValue();
 }
+
+void Cursor::CursorTo(int x, int y) {
+	Keys key_x;
+	Keys key_y;
+	while (GetX() != x || GetY() != y) {
+		if (GetX() < x) {
+			key_x.press(K_RIGHT);
+		}
+		if (GetX() > x) {
+			key_x.press(K_LEFT);
+		}
+		if (GetY() < y) {
+			key_y.press(K_DOWN);
+		}
+		if (GetY() > y) {
+			key_y.press(K_UP);
+		}
+	}
+}
+
+//void Cursor::CursorTo(int x, int y) {
+//	Keys key_x;
+//	Keys key_y;
+//	while (GetX() != x || GetY() != y) {
+//		if (GetX() < x)
+//			key_x.hold(K_RIGHT);
+//		else
+//			key_x.unhold(K_RIGHT);
+//		if (GetX() > x)
+//			key_x.hold(K_LEFT);
+//		else
+//			key_x.unhold(K_LEFT);
+//		if (GetY() < y)
+//			key_y.hold(K_DOWN);
+//		else
+//			key_y.unhold(K_DOWN);
+//		if (GetY() > y)
+//			key_y.hold(K_UP);
+//		else
+//			key_y.unhold(K_UP)
+//	}
+//}

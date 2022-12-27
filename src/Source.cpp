@@ -1,5 +1,6 @@
 ﻿#include<iostream>
 #include <queue>
+#include <list>
 #include <Windows.h>
 #include <TlHelp32.h>
 #include <vector>
@@ -9,23 +10,36 @@
 #include "Consts.h"
 #include "Player.h"
 #include "Cursor.h"
+#include "Entity.h"
+#include "Keys.h"
 
 using namespace std;
 
-HANDLE handleP;
+HWND hwnd;
+HANDLE handle;
+Player hero;
+Cursor cursor;
+Keys keys;
+list<Entity> enemies;
 
 uintptr_t GetModuleBaseAddress(DWORD proc_id, const TCHAR* modName);
 
 void FindEnemys(uintptr_t address);
 
 void PrintName(uintptr_t address);
-int person = 0;
+
+void AddEntityToList(uintptr_t address);
+
+void PrintEntityList(list<Entity>& list);
+
+Entity GetCurrentEnemy();
 
 int main()
 {
 	SetConsoleTitle(L"Warspear Cheat");
 
-	HWND hwnd = FindWindow(NULL, L"Warspear Online");
+	hwnd = FindWindow(NULL, L"Warspear Online");
+	keys = Keys(hwnd);
 	if (hwnd == NULL)
 	{
 		cout << "ERROR: [-] Please Open Warspear Online!" << endl;
@@ -37,8 +51,7 @@ int main()
 	DWORD pId;
 	GetWindowThreadProcessId(hwnd, &pId);
 
-	HANDLE handle = OpenProcess(PROCESS_ALL_ACCESS, FALSE, pId);
-	handleP = handle;
+	handle = OpenProcess(PROCESS_ALL_ACCESS, FALSE, pId);
 	if (pId == NULL)
 	{
 		cout << "ERROR: [-] Process ID not Found!" << endl;
@@ -60,39 +73,46 @@ int main()
 
 	cout << "LOG: [+] Addresses finded\n" << endl;
 
-	Player hero = Player(handle, address_player);
-	Cursor  cursor = Cursor(handle, address_curosr);
+	hero = Player(handle, address_player);
+	cursor = Cursor(handle, address_curosr);
+
 
 	hero.Print();
 	cursor.Print();
 
-	//uintptr_t first_enemy = 0xE8AD23E;
-	//cout << hex << first_enemy << endl;
-
-
+	cout << endl;
 
 	vector<unsigned int> offsets = { 0x10, 0x8, 0x18, 0x0};
 	uintptr_t tmp_address = dw_base_offset + ENTITYS_TREE_STRUCTURE;
+
 	ReadProcessMemory(handle, (BYTE*)tmp_address, &tmp_address, sizeof(tmp_address), NULL);
 	for (int i = 0; i < offsets.size(); ++i) {
 		tmp_address += offsets[i];
 		ReadProcessMemory(handle, (BYTE*)tmp_address, &tmp_address, sizeof(tmp_address), NULL);
 	}
-	cout << tmp_address << endl;
-	
+
 	FindEnemys(tmp_address);
+	PrintEntityList(enemies);
 
-	bool work = true;
+	cout << "LOG: [+] Bot start";
+	clock_t timer = clock();
+	cursor.CursorTo(10, 10);
+	cursor.CursorTo(20, 18);
+	cursor.CursorTo(10, 10);
+	cout << endl;
+	cout << "time: " << (clock() - timer) << endl;
+	// 15 2625
+
+	Entity curent_enemy;
+
 	clock_t ms;
-
-	cout << "Text";
 	while (!GetAsyncKeyState(VK_RETURN)) {
 		ms = clock();
+		break;
+		if (hero.GetHP()) {
+		}
 
-	
-		for (int i = 0; i < 5; i++)
-			cout << "\b";
-		cout << "Text";
+
 
 		while (true)
 			if ((clock() - ms) > (1000 / 30)) break;
@@ -127,21 +147,19 @@ uintptr_t GetModuleBaseAddress(DWORD proc_id, const TCHAR* modName)
 }
 
 void PrintName(uintptr_t address) {
-	person++;
 	int x = 0;
 	int y = 0;
 	int hp = 0;
 	int length = 0;
 	char name[50];
 
-	ReadProcessMemory(handleP, (PBYTE*)(address + 0x14), &address, sizeof(address), NULL);
-	ReadProcessMemory(handleP, (PBYTE*)(address + 0x108), &x, sizeof(short int), NULL);
-	ReadProcessMemory(handleP, (PBYTE*)(address + 0x10A), &y, sizeof(short int), NULL);
-	ReadProcessMemory(handleP, (PBYTE*)(address + 0xF4), &hp, sizeof(int), NULL);
-	ReadProcessMemory(handleP, (PBYTE*)(address + 0x54), &length, sizeof(int), NULL);
-	ReadProcessMemory(handleP, (PBYTE*)(address + 0x58), &name, sizeof(name), NULL);
-	
-	cout << person << ")";
+	ReadProcessMemory(handle, (PBYTE*)(address + 0x14), &address, sizeof(address), NULL);
+	ReadProcessMemory(handle, (PBYTE*)(address + 0x108), &x, sizeof(short int), NULL);
+	ReadProcessMemory(handle, (PBYTE*)(address + 0x10A), &y, sizeof(short int), NULL);
+	ReadProcessMemory(handle, (PBYTE*)(address + 0xF4), &hp, sizeof(int), NULL);
+	ReadProcessMemory(handle, (PBYTE*)(address + 0x54), &length, sizeof(int), NULL);
+	ReadProcessMemory(handle, (PBYTE*)(address + 0x58), &name, sizeof(name), NULL);
+
 	for (int i = 0; i < length*2; i++) {
 		cout << name[i];
 	}
@@ -152,9 +170,9 @@ void PrintName(uintptr_t address) {
 
 uintptr_t add(uintptr_t address, int byte) {
 	if (byte == 4) 
-		ReadProcessMemory(handleP, (PBYTE*)(address + 0x4), &address, sizeof(address), NULL);
+		ReadProcessMemory(handle, (PBYTE*)(address + 0x4), &address, sizeof(address), NULL);
 	if (byte == 8)
-		ReadProcessMemory(handleP, (PBYTE*)(address + 0x8), &address, sizeof(address), NULL);
+		ReadProcessMemory(handle, (PBYTE*)(address + 0x8), &address, sizeof(address), NULL);
 	return address;
 }
 
@@ -162,13 +180,32 @@ void FindEnemys(uintptr_t address) {
 	queue<uintptr_t> q;
 	q.push(address);
 	uintptr_t node;
-	while (!q.empty() || person < 50) {
-		if (q.size() == 100)
-			return;
+	int counter = 0;
+	while (!q.empty() && counter < 100) {
+		counter++;
 		node = q.front();
 		q.pop();
-		PrintName(node);
+		//PrintName(node);
+		AddEntityToList(node);
 		q.push(add(node, 4));
 		q.push(add(node, 8));
 	}
 }
+
+void AddEntityToList(uintptr_t address) {
+	ReadProcessMemory(handle, (PBYTE*)(address + 0x14), &address, sizeof(address), NULL);
+	Entity enemy = Entity(handle, address);
+	if (1 < enemy.GetMaxHP()) {
+		enemies.push_back(enemy);
+	}
+};
+
+void PrintEntityList(list<Entity>& list) {
+	int counter = 0;
+	for (auto i = list.begin(); i != list.cend(); ++i) {
+		counter++;
+		cout << counter << "." << endl;
+		i->Print();
+		cout << endl;
+	}
+};

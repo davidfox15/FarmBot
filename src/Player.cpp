@@ -1,6 +1,14 @@
 #include "Player.h"
 #include "Param.h"
 
+Player::Player()
+{
+	this->max_hp = Param();
+	this->hp = Param();
+	this->x = Param();
+	this->y = Param();
+}
+
 Player::Player(HANDLE handle, uintptr_t address_player) {
 	this->max_hp = Param(handle, address_player, PLAYER_MAX_HP_OFFSETS, false);
 	this->hp = Param(handle, address_player, PLAYER_HP_OFFSETS, false);

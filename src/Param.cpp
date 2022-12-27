@@ -35,6 +35,7 @@ Param::Param(HANDLE handle, uintptr_t first_address, std::vector<unsigned int> o
 
 int Param::GetValue()
 {
+	if (value = NULL) return NULL;
 	ReadProcessMemory(handle, (PBYTE*)address, &value, size, NULL);
 	return value;
 }
