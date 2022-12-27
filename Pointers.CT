@@ -1,0 +1,460 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="42">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>5</ID>
+      <Description>"Cursor"</Description>
+      <Color>808000</Color>
+      <GroupHeader>1</GroupHeader>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>6</ID>
+          <Description>"Cursor Setback Fix"</Description>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+"warspear.exe"+1A82FA:  // X
+db 90 90 90 90          // Nop
+"warspear.exe"+1A8321:  // Y
+db 90 90 90 90          // Original Bytes
+
+[DISABLE]
+"warspear.exe"+1A82FA:  // X
+db 66 89 41 08          // Original Bytes
+"warspear.exe"+1A8321:  // Y
+db 66 89 41 0A          // Original Bytes
+
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>3</ID>
+          <Description>"Cursor X"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>"warspear.exe"+00697328</Address>
+          <Offsets>
+            <Offset>8</Offset>
+            <Offset>25C</Offset>
+            <Offset>4</Offset>
+            <Offset>10</Offset>
+            <Offset>28</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>4</ID>
+          <Description>"Cursor Y"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>"warspear.exe"+00697328</Address>
+          <Offsets>
+            <Offset>A</Offset>
+            <Offset>25C</Offset>
+            <Offset>4</Offset>
+            <Offset>10</Offset>
+            <Offset>28</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>85</ID>
+          <Description>"Cursor XY 4"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>"warspear.exe"+00697328</Address>
+          <Offsets>
+            <Offset>8</Offset>
+            <Offset>25C</Offset>
+            <Offset>4</Offset>
+            <Offset>10</Offset>
+            <Offset>28</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>1</ID>
+          <Description>"Cursor Flag"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>"warspear.exe"+00697328</Address>
+          <Offsets>
+            <Offset>6C</Offset>
+            <Offset>25C</Offset>
+            <Offset>4</Offset>
+            <Offset>10</Offset>
+            <Offset>28</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>2</ID>
+          <Description>"Cursor Timer"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>"warspear.exe"+00697328</Address>
+          <Offsets>
+            <Offset>84</Offset>
+            <Offset>25C</Offset>
+            <Offset>4</Offset>
+            <Offset>10</Offset>
+            <Offset>28</Offset>
+          </Offsets>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>16</ID>
+      <Description>"Player"</Description>
+      <Color>808000</Color>
+      <GroupHeader>1</GroupHeader>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>81</ID>
+          <Description>"Name"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>String</VariableType>
+          <Length>10</Length>
+          <Unicode>1</Unicode>
+          <CodePage>0</CodePage>
+          <ZeroTerminate>1</ZeroTerminate>
+          <Address>warspear.exe+0069B9B0</Address>
+          <Offsets>
+            <Offset>58</Offset>
+            <Offset>14</Offset>
+            <Offset>0</Offset>
+            <Offset>10</Offset>
+            <Offset>32C</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>83</ID>
+          <Description>"Max HP"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>"warspear.exe"+0069B9B0</Address>
+          <Offsets>
+            <Offset>F8</Offset>
+            <Offset>14</Offset>
+            <Offset>0</Offset>
+            <Offset>10</Offset>
+            <Offset>32C</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>78</ID>
+          <Description>"HP"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>"warspear.exe"+0069B9B0</Address>
+          <Offsets>
+            <Offset>F4</Offset>
+            <Offset>14</Offset>
+            <Offset>0</Offset>
+            <Offset>10</Offset>
+            <Offset>32C</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>84</ID>
+          <Description>"Max MP"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>"warspear.exe"+0069B9B0</Address>
+          <Offsets>
+            <Offset>100</Offset>
+            <Offset>14</Offset>
+            <Offset>0</Offset>
+            <Offset>10</Offset>
+            <Offset>32C</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>82</ID>
+          <Description>"MP"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>warspear.exe+0069B9B0</Address>
+          <Offsets>
+            <Offset>FC</Offset>
+            <Offset>14</Offset>
+            <Offset>0</Offset>
+            <Offset>10</Offset>
+            <Offset>32C</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>75</ID>
+          <Description>"Pos X"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>"warspear.exe"+0069B9B0</Address>
+          <Offsets>
+            <Offset>108</Offset>
+            <Offset>14</Offset>
+            <Offset>0</Offset>
+            <Offset>10</Offset>
+            <Offset>32C</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>79</ID>
+          <Description>"Pos Y"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>"warspear.exe"+0069B9B0</Address>
+          <Offsets>
+            <Offset>10A</Offset>
+            <Offset>14</Offset>
+            <Offset>0</Offset>
+            <Offset>10</Offset>
+            <Offset>32C</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>77</ID>
+          <Description>"Des X"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>"warspear.exe"+0069B9B0</Address>
+          <Offsets>
+            <Offset>10C</Offset>
+            <Offset>14</Offset>
+            <Offset>0</Offset>
+            <Offset>10</Offset>
+            <Offset>32C</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>80</ID>
+          <Description>"Des Y"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>"warspear.exe"+0069B9B0</Address>
+          <Offsets>
+            <Offset>10E</Offset>
+            <Offset>14</Offset>
+            <Offset>0</Offset>
+            <Offset>10</Offset>
+            <Offset>32C</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>15</ID>
+          <Description>"IsMoving"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>"warspear.exe"+005F49B8</Address>
+          <Offsets>
+            <Offset>D0</Offset>
+            <Offset>4C</Offset>
+            <Offset>B8</Offset>
+            <Offset>4</Offset>
+            <Offset>D4</Offset>
+            <Offset>10</Offset>
+            <Offset>0</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>14</ID>
+          <Description>"Distance to Destination"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>"warspear.exe"+005F49B8</Address>
+          <Offsets>
+            <Offset>1D8</Offset>
+            <Offset>4C</Offset>
+            <Offset>B8</Offset>
+            <Offset>4</Offset>
+            <Offset>D4</Offset>
+            <Offset>10</Offset>
+            <Offset>0</Offset>
+          </Offsets>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>23</ID>
+      <Description>"Values for Top-Right Entity Display"</Description>
+      <Color>808000</Color>
+      <GroupHeader>1</GroupHeader>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>27</ID>
+          <Description>"Last Selected Entity Name"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>String</VariableType>
+          <Length>100</Length>
+          <Unicode>1</Unicode>
+          <CodePage>0</CodePage>
+          <ZeroTerminate>1</ZeroTerminate>
+          <Address>"warspear.exe"+005F0330</Address>
+          <Offsets>
+            <Offset>220</Offset>
+            <Offset>1B0</Offset>
+            <Offset>2C</Offset>
+            <Offset>10</Offset>
+            <Offset>C</Offset>
+            <Offset>1F0</Offset>
+            <Offset>0</Offset>
+            <Offset>70</Offset>
+            <Offset>28</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>22</ID>
+          <Description>"Health"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>"warspear.exe"+005F0330</Address>
+          <Offsets>
+            <Offset>F50</Offset>
+            <Offset>0</Offset>
+            <Offset>1A8</Offset>
+            <Offset>2C</Offset>
+            <Offset>10</Offset>
+            <Offset>C</Offset>
+            <Offset>1F0</Offset>
+            <Offset>0</Offset>
+            <Offset>70</Offset>
+            <Offset>28</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>26</ID>
+          <Description>"Max Health"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>"warspear.exe"+005F0330</Address>
+          <Offsets>
+            <Offset>F54</Offset>
+            <Offset>0</Offset>
+            <Offset>1A8</Offset>
+            <Offset>2C</Offset>
+            <Offset>10</Offset>
+            <Offset>C</Offset>
+            <Offset>1F0</Offset>
+            <Offset>0</Offset>
+            <Offset>70</Offset>
+            <Offset>28</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>25</ID>
+          <Description>"Mana"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>"warspear.exe"+005F0330</Address>
+          <Offsets>
+            <Offset>F58</Offset>
+            <Offset>0</Offset>
+            <Offset>1A8</Offset>
+            <Offset>2C</Offset>
+            <Offset>10</Offset>
+            <Offset>C</Offset>
+            <Offset>1F0</Offset>
+            <Offset>0</Offset>
+            <Offset>70</Offset>
+            <Offset>28</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>24</ID>
+          <Description>"Max Mana"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>"warspear.exe"+005F0330</Address>
+          <Offsets>
+            <Offset>F5C</Offset>
+            <Offset>0</Offset>
+            <Offset>1A8</Offset>
+            <Offset>2C</Offset>
+            <Offset>10</Offset>
+            <Offset>C</Offset>
+            <Offset>1F0</Offset>
+            <Offset>0</Offset>
+            <Offset>70</Offset>
+            <Offset>28</Offset>
+          </Offsets>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>96</ID>
+      <Description>"Tiger1"</Description>
+      <ShowAsSigned>0</ShowAsSigned>
+      <VariableType>4 Bytes</VariableType>
+      <Address>149A0A60</Address>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>97</ID>
+          <Description>"hp"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>String</VariableType>
+          <Length>13</Length>
+          <Unicode>1</Unicode>
+          <CodePage>0</CodePage>
+          <ZeroTerminate>1</ZeroTerminate>
+          <Address>149A0AB8</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>95</ID>
+          <Description>"Нет описания"</Description>
+          <VariableType>4 Bytes</VariableType>
+          <Address>149A0B54</Address>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>101</ID>
+      <Description>"Нет описания"</Description>
+      <VariableType>4 Bytes</VariableType>
+      <Address>149A0E5C</Address>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>100</ID>
+      <Description>"Нет описания"</Description>
+      <VariableType>4 Bytes</VariableType>
+      <Address>149A146C</Address>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>102</ID>
+      <Description>"Нет описания"</Description>
+      <VariableType>4 Bytes</VariableType>
+      <Address>149A1774</Address>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>98</ID>
+      <Description>"Нет описания"</Description>
+      <VariableType>4 Bytes</VariableType>
+      <Address>149A2394</Address>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>103</ID>
+      <Description>"Нет описания"</Description>
+      <VariableType>4 Bytes</VariableType>
+      <Address>149A2FB4</Address>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>99</ID>
+      <Description>"Нет описания"</Description>
+      <VariableType>4 Bytes</VariableType>
+      <Address>149A32BC</Address>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>104</ID>
+      <Description>"Нет описания"</Description>
+      <VariableType>4 Bytes</VariableType>
+      <Address>149A47F4</Address>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>63</ID>
+      <Description>"Entry of Entity List"</Description>
+      <ShowAsHex>1</ShowAsHex>
+      <ShowAsSigned>0</ShowAsSigned>
+      <Color>808000</Color>
+      <VariableType>4 Bytes</VariableType>
+      <Address>"warspear.exe"+0069B9B0</Address>
+      <Offsets>
+        <Offset>0</Offset>
+        <Offset>10</Offset>
+        <Offset>32C</Offset>
+      </Offsets>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+</CheatTable>
