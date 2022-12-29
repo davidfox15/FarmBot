@@ -67,7 +67,26 @@ std::list<Entity> EntityList::GetAll()
 	return list;
 }
 
-Entity EntityList::GetClosest()
+int getDif(int a, int b) {
+	int dif = a - b;
+	if (dif < 0) dif = dif * -1;
+	return dif;
+}
+
+Entity EntityList::GetClosest(int x, int y)
 {
-	return Entity();
+	std::list<Entity> tmp_list = GetAll();
+
+	closest = *list.begin();
+	int dif = getDif(x, list.begin()->GetX()) + getDif(y, list.begin()->GetY());
+
+	for (auto i = tmp_list.begin(); i != tmp_list.cend(); ++i)  {
+		int new_dif = getDif(x, i->GetX()) + getDif(y, i->GetY());
+		if (new_dif < dif) {
+			closest = *i;
+			dif = new_dif;
+		}
+	}
+
+	return closest;
 }

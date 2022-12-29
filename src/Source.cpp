@@ -91,7 +91,9 @@ int main()
 		ms = clock();
 
 		if (GetAsyncKeyState(VK_TAB)) {
-			enemies.PrintAll();
+			enemies.GetClosest(hero.GetX(), hero.GetY()).Print();
+			cout << endl;
+			Sleep(500);
 		}
 
 		while (true)

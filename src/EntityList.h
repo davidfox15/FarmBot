@@ -13,5 +13,5 @@ public:
 	EntityList(HANDLE handle, uintptr_t address);
 	void PrintAll();
 	std::list<Entity> GetAll();
-	Entity GetClosest();
+	Entity GetClosest(int x, int y);
 };
