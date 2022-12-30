@@ -1,5 +1,7 @@
 #pragma once
 #include "Param.h"
+#include "Entity.h"
+#include "Cursor.h"
 
 const std::vector<unsigned int> PLAYER_MAX_HP_OFFSETS = { 0x32C, 0x10, 0x0, 0x14, 0xF8 };
 const std::vector<unsigned int> PLAYER_HP_OFFSETS = { 0x32C, 0x10, 0x0, 0x14, 0xF4 };
@@ -22,5 +24,8 @@ public:
 	int GetMaxHP();
 	int GetHP();
 	void Print();
+	boolean CanLootEnemy(Entity enemy);
+	void FindLoot(Cursor* cursor, Keys* keys);
+	void TakeLoot(Keys* keys);
 };
 

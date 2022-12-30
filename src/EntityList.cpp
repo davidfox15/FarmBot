@@ -1,11 +1,17 @@
 #include "EntityList.h"
 #include <iostream>
 #include <queue>
+#include "Helper.h"
+#include <vector>
+
+const std::vector<unsigned int> offsets = { 0x10, 0x8, 0x18, 0x0 };
 
 void AddEntityToList(HANDLE handle, uintptr_t address, std::list<Entity>* list) {
+	int max_hp_filter = 2545;
+
 	ReadProcessMemory(handle, (PBYTE*)(address + 0x14), &address, sizeof(address), NULL);
 	Entity enemy = Entity(handle, address);
-	if (1 < enemy.GetMaxHP()) {
+	if (enemy.GetMaxHP() == max_hp_filter && enemy.GetHP() > 1) {
 		list->push_back(enemy);
 	}
 };
@@ -23,7 +29,7 @@ void EntityList::ReadStruct() {
 	q.push(structure_address);
 	uintptr_t node;
 	int counter = 0;
-	while (!q.empty() && counter < 100) {
+	while (!q.empty() && counter < 500) {
 		counter++;
 		node = q.front();
 		q.pop();
@@ -43,9 +49,9 @@ EntityList::EntityList()
 
 EntityList::EntityList(HANDLE handle, uintptr_t address)
 {
+	this->start_address = address;
 	this->handle = handle;
-	this->structure_address = address;
-	ReadStruct();
+	Update();
 }
 
 void EntityList::PrintAll()
@@ -60,23 +66,30 @@ void EntityList::PrintAll()
 	}
 }
 
-std::list<Entity> EntityList::GetAll()
+void EntityList::Update()
 {
+	uintptr_t tmp_address = start_address;
+	ReadProcessMemory(handle, (BYTE*)tmp_address, &tmp_address, sizeof(tmp_address), NULL);
+	for (int i = 0; i < offsets.size(); ++i) {
+		tmp_address += offsets[i];
+		ReadProcessMemory(handle, (BYTE*)tmp_address, &tmp_address, sizeof(tmp_address), NULL);
+	}
+	this->structure_address = tmp_address;
 	list.clear();
 	ReadStruct();
+}
+
+std::list<Entity> EntityList::GetAll()
+{
 	return list;
 }
 
-int getDif(int a, int b) {
-	int dif = a - b;
-	if (dif < 0) dif = dif * -1;
-	return dif;
-}
-
-Entity EntityList::GetClosest(int x, int y)
+Entity EntityList::UpdateClosest(int x, int y)
 {
+	while (list.size() < 1) {
+		Update();
+	}
 	std::list<Entity> tmp_list = GetAll();
-
 	closest = *list.begin();
 	int dif = getDif(x, list.begin()->GetX()) + getDif(y, list.begin()->GetY());
 
@@ -88,5 +101,10 @@ Entity EntityList::GetClosest(int x, int y)
 		}
 	}
 
+	return closest;
+}
+
+Entity EntityList::GetClosest()
+{
 	return closest;
 }

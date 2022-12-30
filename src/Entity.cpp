@@ -40,7 +40,7 @@ int Entity::GetHP() {
 }
 
 void Entity::Print() {
-	printf("PlayerMaxHP [%i]\n", GetMaxHP());
+	//printf("PlayerMaxHP [%i]\n", GetMaxHP());
 	printf("PlayerHP [%i]\n", GetHP());
 	printf("PlayerX [%i]\n", GetX());
 	printf("PlayerY [%i]\n", GetY());

@@ -11,6 +11,7 @@
 #define K_2 0x32
 #define K_3 0x33
 #define K_4 0x34
+#define K_F1 0x70
 
 class Keys {
 	HWND hwnd;

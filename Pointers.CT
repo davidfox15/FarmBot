@@ -238,7 +238,7 @@ db 66 89 41 0A          // Original Bytes
           <Description>"IsMoving"</Description>
           <ShowAsSigned>0</ShowAsSigned>
           <VariableType>4 Bytes</VariableType>
-          <Address>"warspear.exe"+005F49B8</Address>
+          <Address>"warspear.exe"+0069B9B0</Address>
           <Offsets>
             <Offset>D0</Offset>
             <Offset>4C</Offset>
@@ -247,6 +247,20 @@ db 66 89 41 0A          // Original Bytes
             <Offset>D4</Offset>
             <Offset>10</Offset>
             <Offset>0</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>87</ID>
+          <Description>"IsMoving"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>"warspear.exe"+0069B9B0</Address>
+          <Offsets>
+            <Offset>128</Offset>
+            <Offset>14</Offset>
+            <Offset>0</Offset>
+            <Offset>10</Offset>
+            <Offset>32C</Offset>
           </Offsets>
         </CheatEntry>
         <CheatEntry>
@@ -386,6 +400,12 @@ db 66 89 41 0A          // Original Bytes
         <Offset>10</Offset>
         <Offset>32C</Offset>
       </Offsets>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>86</ID>
+      <Description>"Нет описания"</Description>
+      <VariableType>4 Bytes</VariableType>
+      <Address>0732CA10</Address>
     </CheatEntry>
   </CheatEntries>
   <UserdefinedSymbols/>

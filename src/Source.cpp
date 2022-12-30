@@ -73,27 +73,63 @@ int main()
 
 	cout << endl;
 
-	vector<unsigned int> offsets = { 0x10, 0x8, 0x18, 0x0};
 	uintptr_t entitys_struct_address = dw_base_offset + ENTITYS_TREE_STRUCTURE;
 
-	ReadProcessMemory(handle, (BYTE*)entitys_struct_address, &entitys_struct_address, sizeof(entitys_struct_address), NULL);
-	for (int i = 0; i < offsets.size(); ++i) {
-		entitys_struct_address += offsets[i];
-		ReadProcessMemory(handle, (BYTE*)entitys_struct_address, &entitys_struct_address, sizeof(entitys_struct_address), NULL);
-	}
+	cout << entitys_struct_address << endl;
 	enemies = EntityList(handle, entitys_struct_address);
 	enemies.PrintAll();
 
 	cout << "LOG: [+] Bot start" << endl;
+	cout << endl;
 
+	int enemy_counter = 0;
+	boolean updateClosest = true;
 	clock_t ms;
 	while (!GetAsyncKeyState(VK_RETURN)) {
 		ms = clock();
 
-		if (GetAsyncKeyState(VK_TAB)) {
-			enemies.GetClosest(hero.GetX(), hero.GetY()).Print();
+		if (updateClosest)
+		{
+			enemies.PrintAll();
 			cout << endl;
+			enemies.UpdateClosest(hero.GetX(), hero.GetY());
+			cout << enemy_counter << "----------------------------" << endl;
+			enemy_counter++;
+			enemies.GetClosest().Print();
+			cout << endl;
+			updateClosest = false;
+		}
+
+		cursor.CursorTo(enemies.GetClosest().GetX(), enemies.GetClosest().GetY());
+		keys.press(K_ENTER);
+
+		int skills_ms = 16000;
+		while (enemies.GetClosest().GetHP() > 0) {
+			if ((clock() - skills_ms)/1000 % 8 == 0)
+				keys.press(K_1);
+			if ((clock() - skills_ms) /1000 % 16 == 0) {
+				keys.press(K_2);
+				skills_ms = clock();
+			}	
+			cursor.CursorTo(enemies.GetClosest().GetX(), enemies.GetClosest().GetY());
+			keys.press(K_ENTER);
 			Sleep(500);
+		}
+
+		// Идет к цели
+		boolean findedLoot = false;
+		Sleep(2500);
+		if (cursor.GetStatus() == 10) findedLoot = true;
+		keys.press(K_ENTER);
+
+		if (updateClosest == false && hero.CanLootEnemy(enemies.GetClosest())) {
+			if (findedLoot)
+				hero.TakeLoot(&keys);
+			else
+				hero.FindLoot(&cursor, &keys);
+
+			enemies.Update();
+			updateClosest = true;
 		}
 
 		while (true)

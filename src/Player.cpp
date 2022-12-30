@@ -1,5 +1,6 @@
 #include "Player.h"
 #include "Param.h"
+#include "Helper.h"
 
 Player::Player()
 {
@@ -44,5 +45,33 @@ void Player::Print() {
 	printf("PlayerHP [%i]\n", GetHP());
 	printf("PlayerX [%i]\n", GetX());
 	printf("PlayerY [%i]\n", GetY());
+}
+
+boolean Player::CanLootEnemy(Entity enemy)
+{
+	int dif = getDif(GetX(), enemy.GetX()) + getDif(GetY(), enemy.GetY());
+	if (dif < 2)
+		return true;
+	return false;
+}
+
+void Player::FindLoot(Cursor* cursor, Keys* keys)
+{
+	for (int x = (GetX() - 1); x <= (GetX() + 1); x++)
+		for (int y = (GetY() - 1); y <= (GetY() + 1); y++) {
+			cursor->CursorTo(x, y);
+			if (cursor->GetStatus() == 10) {
+				TakeLoot(keys);
+				return;
+			}
+		}
+}
+
+void Player::TakeLoot(Keys* keys) {
+	keys->press(K_ENTER);
+	Sleep(500);
+	keys->press(K_ENTER);
+	Sleep(500);
+	keys->press(K_ENTER);
 }
 

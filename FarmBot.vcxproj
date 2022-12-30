@@ -129,6 +129,7 @@
   <ItemGroup>
     <ClCompile Include="src\Cursor.cpp" />
     <ClCompile Include="src\Entity.cpp" />
+    <ClCompile Include="src\Helper.cpp" />
     <ClCompile Include="src\Keys.cpp" />
     <ClCompile Include="src\EntityList.cpp" />
     <ClCompile Include="src\Param.cpp" />
@@ -139,6 +140,7 @@
     <ClInclude Include="src\Consts.h" />
     <ClInclude Include="src\Cursor.h" />
     <ClInclude Include="src\Entity.h" />
+    <ClInclude Include="src\Helper.h" />
     <ClInclude Include="src\Keys.h" />
     <ClInclude Include="src\EntityList.h" />
     <ClInclude Include="src\Param.h" />

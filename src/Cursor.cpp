@@ -1,6 +1,7 @@
 #include "Cursor.h"
 #include "Keys.h"
 #include <iostream>
+#include "Helper.h"
 
 Cursor::Cursor()
 {
@@ -46,20 +47,19 @@ int Cursor::GetStatus()
 }
 
 void Cursor::CursorTo(int x, int y) {
-	Keys key_x;
-	Keys key_y;
+	Keys key;
 	while (GetX() != x || GetY() != y) {
 		if (GetX() < x) {
-			key_x.press(K_RIGHT);
+			key.press(K_RIGHT);
 		}
 		if (GetX() > x) {
-			key_x.press(K_LEFT);
+			key.press(K_LEFT);
 		}
 		if (GetY() < y) {
-			key_y.press(K_DOWN);
+			key.press(K_DOWN);
 		}
 		if (GetY() > y) {
-			key_y.press(K_UP);
+			key.press(K_UP);
 		}
 	}
 }
