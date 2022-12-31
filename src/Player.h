@@ -26,6 +26,6 @@ public:
 	void Print();
 	boolean CanLootEnemy(Entity enemy);
 	void FindLoot(Cursor* cursor, Keys* keys);
-	void TakeLoot(Keys* keys);
+	void TakeLoot(Keys* keys, Cursor* cursor);
 };
 

@@ -61,17 +61,17 @@ void Player::FindLoot(Cursor* cursor, Keys* keys)
 		for (int y = (GetY() - 1); y <= (GetY() + 1); y++) {
 			cursor->CursorTo(x, y);
 			if (cursor->GetStatus() == 10) {
-				TakeLoot(keys);
+				TakeLoot(keys, cursor);
 				return;
 			}
 		}
 }
 
-void Player::TakeLoot(Keys* keys) {
-	keys->press(K_ENTER);
-	Sleep(500);
-	keys->press(K_ENTER);
-	Sleep(500);
-	keys->press(K_ENTER);
+void Player::TakeLoot(Keys* keys, Cursor* cursor) {
+	while (cursor->GetStatus() == 10) {
+		keys->press(K_ENTER);
+		Sleep(250);
+	}
+
 }
 

@@ -48,6 +48,7 @@ int Cursor::GetStatus()
 
 void Cursor::CursorTo(int x, int y) {
 	Keys key;
+	int ms = clock();
 	while (GetX() != x || GetY() != y) {
 		if (GetX() < x) {
 			key.press(K_RIGHT);
@@ -60,6 +61,10 @@ void Cursor::CursorTo(int x, int y) {
 		}
 		if (GetY() > y) {
 			key.press(K_UP);
+		}
+		if ((clock() - ms) / 1000 > 5) {
+			key.press(K_F1);
+			ms = clock();
 		}
 	}
 }

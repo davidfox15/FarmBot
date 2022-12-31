@@ -87,6 +87,14 @@ int main()
 	clock_t ms;
 	while (!GetAsyncKeyState(VK_RETURN)) {
 		ms = clock();
+		if (enemy_counter > 160) {
+			cursor.CursorTo(10, 10);
+			keys.press(K_ENTER);
+			Sleep(500);
+			cursor.CursorTo(13, 26);
+			keys.press(K_ENTER);
+			return 0;
+		}
 
 		if (updateClosest)
 		{
@@ -118,13 +126,12 @@ int main()
 
 		// Идет к цели
 		boolean findedLoot = false;
-		Sleep(2500);
+		Sleep(2000);
 		if (cursor.GetStatus() == 10) findedLoot = true;
 		keys.press(K_ENTER);
-
 		if (updateClosest == false && hero.CanLootEnemy(enemies.GetClosest())) {
 			if (findedLoot)
-				hero.TakeLoot(&keys);
+				hero.TakeLoot(&keys, &cursor);
 			else
 				hero.FindLoot(&cursor, &keys);
 

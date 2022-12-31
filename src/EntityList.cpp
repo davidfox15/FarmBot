@@ -29,7 +29,7 @@ void EntityList::ReadStruct() {
 	q.push(structure_address);
 	uintptr_t node;
 	int counter = 0;
-	while (!q.empty() && counter < 500) {
+	while (!q.empty() && counter < 150) {
 		counter++;
 		node = q.front();
 		q.pop();
@@ -88,6 +88,7 @@ Entity EntityList::UpdateClosest(int x, int y)
 {
 	while (list.size() < 1) {
 		Update();
+		Sleep(250);
 	}
 	std::list<Entity> tmp_list = GetAll();
 	closest = *list.begin();
